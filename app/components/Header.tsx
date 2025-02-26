@@ -27,7 +27,7 @@ export default function Header() {
             className="btn btn-ghost text-xl gap-2 normal-case font-bold"
             prefetch={true}
             onClick={() =>
-              showNotification("Welcome to ImageKit ReelsPro", "info")
+              showNotification("Welcome to ReelPro", "info")
             }
           >
             <Home className="w-5 h-5" />
