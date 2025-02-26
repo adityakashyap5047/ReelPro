@@ -8,10 +8,12 @@ export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: "Credentials",
+            // In the credentials we give the credentials
             credentials: {
                 email: {label: "Email", type: "text"},
                 password: {label: "Password", type: "password"}
             },
+            // In the authorize we write the logic
             async authorize(credentials){
 
                 if(!credentials?.email || !credentials.password){
@@ -42,4 +44,23 @@ export const authOptions: NextAuthOptions = {
             }
         })
     ],
+
+    callbacks: {
+        async jwt({token, user}){
+            if(user){
+                token.id = user.id
+            }
+            return token;
+        },
+        async session({session, token}){
+
+            if(session.user){
+                session.user.id = token.id as string
+            }
+            return session
+        }
+    },
+    session: {
+        strategy: "jwt"
+    }
 }
