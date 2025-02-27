@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import { useNotification } from "./Notification";
 import { apiClient } from "@/lib/api-client";
 import FileUpload from "./FileUpload";
+import { useRouter } from "next/navigation";
 
 interface VideoFormData {
   title: string;
@@ -20,6 +21,7 @@ export default function VideoUploadForm() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const { showNotification } = useNotification();
   const fileUploadRef = useRef<{ reset: () => void } | null>(null);
+  const router = useRouter();
 
   const {
     register,
@@ -63,6 +65,8 @@ export default function VideoUploadForm() {
       setValue("thumbnailUrl", "");
       setUploadProgress(0);
       fileUploadRef.current?.reset(); // Reset file input
+      router.push("/");
+      
     } catch (error) {
       showNotification(
         error instanceof Error ? error.message : "Failed to publish video",
