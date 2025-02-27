@@ -1,8 +1,8 @@
 "use client";
 
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { IKUpload } from "imagekitio-next";
 import { IKUploadResponse } from "imagekitio-next/dist/types/components/IKUpload/props";
-import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 interface FileUploadProps {
@@ -11,13 +11,14 @@ interface FileUploadProps {
   fileType?: "image" | "video";
 }
 
-export default function FileUpload({
-  onSuccess,
-  onProgress,
-  fileType = "image",
-}: FileUploadProps) {
+const FileUpload = forwardRef(({ onSuccess, onProgress, fileType = "image" }: FileUploadProps, ref) => {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [key, setKey] = useState(Date.now()); // Unique key to force re-render
+
+  useImperativeHandle(ref, () => ({
+    reset: () => setKey(Date.now()), // Reset by changing key
+  }));
 
   const onError = (err: { message: string }) => {
     setError(err.message);
@@ -42,33 +43,10 @@ export default function FileUpload({
     }
   };
 
-  const validateFile = (file: File) => {
-    if (fileType === "video") {
-      if (!file.type.startsWith("video/")) {
-        setError("Please upload a valid video file");
-        return false;
-      }
-      if (file.size > 100 * 1024 * 1024) {
-        setError("Video size must be less than 100MB");
-        return false;
-      }
-    } else {
-      const validTypes = ["image/jpeg", "image/png", "image/webp"];
-      if (!validTypes.includes(file.type)) {
-        setError("Please upload a valid image file (JPEG, PNG, or WebP)");
-        return false;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        setError("File size must be less than 5MB");
-        return false;
-      }
-    }
-    return true;
-  };
-
   return (
     <div className="space-y-2">
       <IKUpload
+        key={key} // Force re-render when reset is triggered
         fileName={fileType === "video" ? "video" : "image"}
         onError={onError}
         onSuccess={handleSuccess}
@@ -76,7 +54,6 @@ export default function FileUpload({
         onUploadProgress={handleProgress}
         accept={fileType === "video" ? "video/*" : "image/*"}
         className="file-input file-input-bordered w-full"
-        validateFile={validateFile}
         useUniqueFileName={true}
         folder={fileType === "video" ? "/videos" : "/images"}
       />
@@ -91,4 +68,8 @@ export default function FileUpload({
       {error && <div className="text-error text-sm">{error}</div>}
     </div>
   );
-}
+});
+
+FileUpload.displayName = "FileUpload";
+
+export default FileUpload;

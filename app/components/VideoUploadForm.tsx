@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IKUploadResponse } from "imagekitio-next/dist/types/components/IKUpload/props";
 import { Loader2 } from "lucide-react";
@@ -19,6 +19,7 @@ export default function VideoUploadForm() {
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const { showNotification } = useNotification();
+  const fileUploadRef = useRef<{ reset: () => void } | null>(null);
 
   const {
     register,
@@ -55,12 +56,13 @@ export default function VideoUploadForm() {
       await apiClient.createVideo(data);
       showNotification("Video published successfully!", "success");
 
-      // Reset form after successful submission
+      // Reset form and file input
       setValue("title", "");
       setValue("description", "");
       setValue("videoUrl", "");
       setValue("thumbnailUrl", "");
       setUploadProgress(0);
+      fileUploadRef.current?.reset(); // Reset file input
     } catch (error) {
       showNotification(
         error instanceof Error ? error.message : "Failed to publish video",
@@ -77,36 +79,25 @@ export default function VideoUploadForm() {
         <label className="label">Title</label>
         <input
           type="text"
-          className={`input input-bordered ${
-            errors.title ? "input-error" : ""
-          }`}
+          className={`input input-bordered ${errors.title ? "input-error" : ""}`}
           {...register("title", { required: "Title is required" })}
         />
-        {errors.title && (
-          <span className="text-error text-sm mt-1">
-            {errors.title.message}
-          </span>
-        )}
+        {errors.title && <span className="text-error text-sm mt-1">{errors.title.message}</span>}
       </div>
 
       <div className="form-control">
         <label className="label">Description</label>
         <textarea
-          className={`textarea textarea-bordered h-24 ${
-            errors.description ? "textarea-error" : ""
-          }`}
+          className={`textarea textarea-bordered h-24 ${errors.description ? "textarea-error" : ""}`}
           {...register("description", { required: "Description is required" })}
         />
-        {errors.description && (
-          <span className="text-error text-sm mt-1">
-            {errors.description.message}
-          </span>
-        )}
+        {errors.description && <span className="text-error text-sm mt-1">{errors.description.message}</span>}
       </div>
 
       <div className="form-control">
         <label className="label">Upload Video</label>
         <FileUpload
+          ref={fileUploadRef} // Attach ref to reset input
           fileType="video"
           onSuccess={handleUploadSuccess}
           onProgress={handleUploadProgress}
@@ -121,11 +112,7 @@ export default function VideoUploadForm() {
         )}
       </div>
 
-      <button
-        type="submit"
-        className="btn btn-primary btn-block"
-        disabled={loading || !uploadProgress}
-      >
+      <button type="submit" className="btn btn-primary btn-block" disabled={loading || !uploadProgress}>
         {loading ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
