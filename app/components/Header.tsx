@@ -84,7 +84,7 @@ export default function Header() {
                       href="/login"
                       className="px-4 py-2 hover:bg-base-200 block w-full"
                       onClick={() =>
-                        showNotification("Please sign in to continue", "info")
+                        showNotification("Please Login in to continue", "info")
                       }
                     >
                       Login

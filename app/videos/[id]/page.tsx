@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { IVideo } from "@/models/Video";
 import { apiClient } from "@/lib/api-client";
 import { useParams } from "next/navigation";
-import VideoComponent from "@/app/components/VideoComponent";
+import { IKVideo } from "imagekitio-next";
 
 export default function Home() {
   const [video, setVideo] = useState<IVideo | null>(null);
@@ -49,8 +49,34 @@ export default function Home() {
       )}
 
       {video && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <VideoComponent key={video._id?.toString()} video={video} />
+        <div className="flex items-center min-h-[calc(100vh-190px)]">
+          <div className="card bg-base-100 lg:w-3/4 mx-auto shadow hover:shadow-lg transition-all duration-300">
+          <figure className="relative px-4 pt-4">
+              <div
+                className="rounded-xl overflow-hidden relative w-full"
+              >
+                <IKVideo
+                  path={video.videoUrl}
+                  transformation={[
+                    {
+                      height: "1920",
+                      width: "1080",
+                    },
+                  ]}
+                  controls={video.controls}
+                  className="w-full bject-cover"
+                />
+              </div>
+          </figure>
+
+          <div className="card-body p-4">
+            <h2 className="card-title text-lg">{video.title}</h2>
+
+            <p className="text-sm text-base-content/70 ">
+              {video.description}
+            </p>
+          </div>
+        </div>
         </div>
       )}
     </main>

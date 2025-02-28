@@ -4,7 +4,7 @@ import { IVideo } from "@/models/Video";
 
 export default function VideoComponent({ video }: { video: IVideo }) {
   return (
-    <div className="card bg-base-100 shadow hover:shadow-lg transition-all duration-300">
+    <div className="card bg-base-100 shadow hover:shadow-lg transition-all duration-300 my-3">
       <figure className="relative px-4 pt-4">
         <Link href={`/videos/${video._id}`} className="relative group w-full">
           <div
