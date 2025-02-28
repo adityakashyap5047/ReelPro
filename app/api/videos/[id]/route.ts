@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 export async function GET(request: NextRequest, {params}: {params: {id: string}}) {
     try {
-        const id = await params.id;
+        const id = params.id;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return NextResponse.json(
