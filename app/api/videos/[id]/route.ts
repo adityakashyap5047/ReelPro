@@ -3,9 +3,9 @@ import Video from "@/models/Video";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export async function GET(request: NextRequest, { params }: { params: Record<string, string> }) {
+export async function GET(request: NextRequest, {params}: {params: {id: string}}) {
     try {
-        const { id } = params;
+        const id = await params.id;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return NextResponse.json(
