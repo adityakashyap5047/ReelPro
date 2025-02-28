@@ -3,14 +3,10 @@ import Video from "@/models/Video";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-interface VideoParams {
-    id: string;
-}
-
-export async function GET(request: NextRequest, context: {params: VideoParams}) {
+export async function GET(request: NextRequest, {params}: {params: Promise<{id: string}>}) {
     try {
-        const {id} = context.params;
-
+        const id = (await params).id;
+        
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return NextResponse.json(
                 { error: "Invalid video ID format" },
