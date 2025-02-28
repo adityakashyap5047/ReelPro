@@ -46,7 +46,7 @@ const FileUpload = forwardRef(({ onSuccess, onProgress, fileType = "image" }: Fi
   return (
     <div className="space-y-2">
       <IKUpload
-        key={key} // Force re-render when reset is triggered
+        key={key}
         fileName={fileType === "video" ? "video" : "image"}
         onError={onError}
         onSuccess={handleSuccess}
