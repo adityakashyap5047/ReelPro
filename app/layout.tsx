@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <Providers>
           <Header/>
-          <main className="container mx-auto px-4">
+          <main className="container mx-auto px-4 flex flex-1 min-h-[calc(100vh-437px)] lg:min-h-[calc(100vh-349px)]">
             {children}
           </main>
           <Footer/>
