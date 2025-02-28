@@ -63,7 +63,8 @@ export default function Home() {
                       width: "1080",
                     },
                   ]}
-                  controls={video.controls}
+                  controls={false}
+                  autoPlay={true}
                   className="w-full bject-cover"
                 />
               </div>
