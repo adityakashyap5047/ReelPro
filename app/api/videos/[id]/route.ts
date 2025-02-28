@@ -3,9 +3,13 @@ import Video from "@/models/Video";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export async function GET(request: NextRequest, {params}: {params: {id: string}}) {
+interface VideoParams {
+    id: string;
+}
+
+export async function GET(request: NextRequest, context: {params: VideoParams}) {
     try {
-        const id = params.id;
+        const {id} = context.params;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return NextResponse.json(
