@@ -114,7 +114,7 @@ export default function Home() {
                   className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full"
                   onClick={handleVideoClick}
                 >
-                  {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                  {!isPlaying ? <Pause size={20} /> : <Play size={20} />}
                 </button>
                 <div
                   className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[92%] h-1 bg-gray-500 cursor-pointer rounded-md"
